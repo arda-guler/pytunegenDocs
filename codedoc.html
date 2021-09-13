@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>pyTuneGen Code Reference</title>
+</head>
+<body style="background-color:black;">
+	
+	<font color="lime"> 
+	<a href="index.html">Index</a> 
+	<a href="about.html">About</a> 
+	<a href="installation.html">Installation</a> 
+	<a href="https://github.com/arda-guler/pyTuneGen">Source Code (Github)</a> 
+	<a href="https://pypi.org/project/pytunegen/">PyPi Page</a> 
+	<h1>Code Reference</h1>
+	<a href="https://github.com/arda-guler/pyTuneGen#usage">Quickstart with Example Code</a> 
+	<h2>pytunegen.constants</h2>
+	<p>
+	pytunegen.constants holds... well... constants. You won't need to communicate with this module unless you want to pull off a really 
+	crazy trick. It includes:
+	<br>
+	<br>
+	&emsp;
+	 - Note pitches
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   All notes from C3 to B5 are present.
+	<br>
+	&emsp;
+	&emsp;
+	   Variables representing full notes are written as c3, d3, f3, ..., a4, b4, ... and so on.
+	<br>
+	&emsp;
+	&emsp;
+	   Variables representing half notes are written as c_4, f_4, ... and so on. The underscore represents "#", so c_4 is actually C#4.
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   pytunegen.constants.c5 would give you the pitch of the note C5 as an integer, which is 523. (Due to C5's frequency being 523 Hertz.)
+	<br>
+	<br>
+	<br>
+	&emsp;
+	 - Scales (dicts that show which notes are used in which scale)
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   In a scale dict, keys are the usual way notes are written, and values are the pitch values of the notes.
+	<br>
+	&emsp;
+	&emsp;
+	   For example: a_major = {"C#3":c_3, "D3":d3, "E3":e3, "F#3":f_3, "G#3":g_3, "A3":a3, "B3":b3, ... }
+	<br>
+	&emsp;
+	&emsp;
+	   Following scales are available: c_major, d_major, e_major, f_major, g_major, a_major, b_major, c_minor, d_minor, e_minor, f_minor, g_minor, a_minor, b_minor
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   "full_notes" is a dict (or a special scale) that includes all notes.
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   "scales" is a dict that holds all scales + full_notes. You will probably want to use this to get a scale.
+	<br>
+	&emsp;
+	&emsp;
+	   (pytunegen.constants.scales.get("F Minor") gets you the f_minor dict)
+	<br>
+	<br>
+	<br>
+	&emsp;
+	 - Preset bpm values (the script randomly chooses among presets if the user does not provide a custom bpm)
+	<br>
+	&emsp;
+	&emsp;
+	   bpm_slowest, bpm_slow, bpm_slowish, bpm_normal, bpm_fastish, bpm_fast, bpm_fastest
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   There is also a list of all preset bpms, called "bpms".
+	<br>
+	&emsp;
+	&emsp;
+	   bpms = [bpm_slow, bpm_slowish ... ]
+	<br>
+	<br>
+	<br>
+	&emsp;
+	 - Note durations
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   There is a dict that holds possible note durations from 1/8 to 4.
+	<br>
+	&emsp;
+	&emsp;
+	   note_durations = {"1/8": 1/8, "1/4":1/4, "1/2": 1/2, "1":1, "2":2, "4":4}
+	<br>
+	<br>
+	<br>
+	&emsp;
+	 - Bar repeats
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	   A list holds possible times a bar can repeat.
+	<br>
+	&emsp;
+	&emsp;
+	   bar_repeats = [2, 4]
+	<br>
+
+	<h2>pytunegen.tunegen</h2>
+	<p>
+	This is where the actual music generation happens.
+	<br>
+	<br>
+	&emsp;
+	 - class Tunegen(seed = None, music_length = 50,
+                 scale = None, bpm = None, time_sig = None,
+                 note_jump_limit = 2.2, silence_percent = 1,
+                 non_repeat_percent = 65)
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	Tunegen class is the tune generator object.
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	Attributes:
+	<br>
+	&emsp;
+	&emsp;
+	seed: seed to seed Python's 'random' module with, at the start of the generation. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	music_length: Integer representing total length of the generated music in number of bars. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	scale: Music scale to pick notes from. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	bpm: Music playing speed in beats per minute. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	time_sig: String to customize the time signature used for music generation. Must be written in "a/b" format where b is a positive even integer, and a is a postive integer. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	note_jump_limit: The factor which prevents "jumping" between too high and too low notes. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	silence_percent: Ratio of silences to all notes throughout the whole tune. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	non_repeat_percent: Percentage of bars that are not repeated. OPTIONAL.
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	Methods:
+	<br>
+	&emsp;
+	&emsp;
+	generate(): 
+	Generates the music with the parameters provided to the Tunegen instance. Returns a list of Bar objects (see below).
+	<br>
+	<br>
+	&emsp;
+	 - class Bar(self, note_names, durations, bar_repeat)
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	Attributes:
+	<br>
+	&emsp;
+	&emsp;
+	note_names: A list of names of the notes in the bar. (such as ["C4", "D#4", ...])
+	<br>
+	&emsp;
+	&emsp;
+	durations: A list of note durations in tha bar. (such as [0.25, 1, 0.25, 0.25, ...])
+	<br>
+	&emsp;
+	&emsp;
+	bar_repeat: Number of times the bar is to be repeated. Integer value.
+	<br>
+	&emsp;
+	&emsp;
+	notes: A list of Note objects (see below).
+	<br>
+	<br>
+	&emsp;
+	 - class Note(self, pitch, duration, silence)
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	Attributes:
+	<br>
+	&emsp;
+	&emsp;
+	pitch: The pitch (frequency) of the note, in Hertz.
+	<br>
+	&emsp;
+	&emsp;
+	duration: Duration of the note.
+	<br>
+	&emsp;
+	&emsp;
+	silence: Bool value that denotes whether the note is a silence or an actual note.
+	</p>
+	
+	<h2>pytunegen.midigen</h2>
+	<p>
+	This is the MIDI creation and exporting tool.
+	<br>
+	<br>
+	&emsp;
+	 - class MIDIgen(seed = None, music_length = 50,
+                 scale = None, bpm = None, time_sig = None,
+                 note_jump_limit = 2.2, silence_percent = 1,
+                 non_repeat_percent = 65)
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	MIDIgen class is the MIDI generation and exporting object. Uses same attributes as Tunegen 
+	(because it feeds these values into Tunegen itself, making it easier to use).
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	Attributes:
+	<br>
+	&emsp;
+	&emsp;
+	seed: seed to seed Python's 'random' module with, at the start of the generation. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	music_length: Integer representing total length of the generated music in number of bars. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	scale: Music scale to pick notes from. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	bpm: Music playing speed in beats per minute. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	time_sig: String to customize the time signature used for music generation. Must be written in "a/b" format where b is a positive even integer, and a is a postive integer. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	note_jump_limit: The factor which prevents "jumping" between too high and too low notes. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	silence_percent: Ratio of silences to all notes throughout the whole tune. OPTIONAL.
+	<br>
+	&emsp;
+	&emsp;
+	non_repeat_percent: Percentage of bars that are not repeated. OPTIONAL.
+	<br>
+	<br>
+	&emsp;
+	&emsp;
+	Methods:
+	<br>
+	&emsp;
+	&emsp;
+	export(export_filename = None): 
+	Converts the generated music into MIDI format and exports it as a .mid file.
+	<br>
+	&emsp;
+	&emsp;
+	&emsp;
+	Arguments:
+	<br>
+	&emsp;
+	&emsp;
+	&emsp;
+	export_filename: File name for the exported .mid file. OPTIONAL. (If not provided, it will be created as "&lt;randomization_seed&gt;.mid".)
+	<br>
+	<br>
+	</p>
+</body>
+</html> 
